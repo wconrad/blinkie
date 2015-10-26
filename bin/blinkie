@@ -8,7 +8,7 @@ class GameWindow < Gosu::Window
     super 640, 480
     self.caption = "Gosu Tutorial Game"
     @led_off_image = Gosu::Image.new(image_path("led-off.png"))
-    @led_on_image = Gosu::Image.new(image_path("led-off.png"))
+    @led_on_image = Gosu::Image.new(image_path("led-on.png"))
   end
 
   def needs_cursor?
@@ -19,7 +19,13 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    @led_off_image.draw(0, 0, 0);
+    scale = 1.0
+    if rand < 0.5
+      @led_off_image.draw(0, 0, 0, scale, scale);
+    else
+      @led_on_image.draw(0, 0, 0, scale, scale);
+    end
+    @led_on_image.draw(@led_off_image.width, 0, 0, scale, scale);
   end
 
   def image_dir
