@@ -11,6 +11,12 @@ class GameWindow < Gosu::Window
     @led_off_image = Gosu::Image.new(rmagick_circle("#440000"))
     @led_on_image = Gosu::Image.new(rmagick_circle("#aa3300"))
     @count = 123
+    Thread.new do
+      loop do
+        @count += 1
+        sleep(0.1)
+      end
+    end
   end
 
   def needs_cursor?
@@ -30,7 +36,6 @@ class GameWindow < Gosu::Window
       image.draw(x, 0, 0, scale, scale)
       x += image.width
     end
-    @count += 1
   end
 
   def draw_background
