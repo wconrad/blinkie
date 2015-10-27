@@ -1,14 +1,15 @@
 #!/usr/bin/env ruby
 
 require "gosu"
+require "rmagick"
 
 class GameWindow < Gosu::Window
 
   def initialize
     super 640, 480
     self.caption = "Gosu Tutorial Game"
-    @led_off_image = Gosu::Image.new(image_path("led-off.png"))
-    @led_on_image = Gosu::Image.new(image_path("led-on.png"))
+    @led_off_image = Gosu::Image.new(rmagick_circle("#440000"))
+    @led_on_image = Gosu::Image.new(rmagick_circle("#aa3300"))
   end
 
   def needs_cursor?
@@ -19,21 +20,47 @@ class GameWindow < Gosu::Window
   end
 
   def draw
+    draw_background
     scale = 1.0
-    if rand < 0.5
-      @led_off_image.draw(0, 0, 0, scale, scale);
-    else
-      @led_on_image.draw(0, 0, 0, scale, scale);
+    x = 0
+    image = rand < 0.5 ? @led_off_image : @led_on_image
+    image.draw(x, 0, 0, scale, scale);
+    x += image.width
+    @led_off_image.draw(x, 0, 0, scale, scale)
+    x += image.width
+    @led_on_image.draw(x, 0, 0, scale, scale)
+  end
+
+  def draw_background
+    color = Gosu::Color.argb(0xff_666666)
+    Gosu.draw_rect(0, 0, width, height, color)
+  end
+
+  def draw_rect(x1, y1, x2, y2, color)
+    draw_quad(
+      0, 0, color,
+      width, 0, color,
+      0, height, color,
+      width, height, color,
+      0,
+    )
+  end
+
+  def rmagick_circle(color)
+    width = 32
+    height = width
+    image = Magick::Image.new(width, height) do
+      self.background_color = "none"
     end
-    @led_on_image.draw(@led_off_image.width, 0, 0, scale, scale);
-  end
-
-  def image_dir
-    File.join(__dir__, "../lib/images")
-  end
-
-  def image_path(filename)
-    File.join(image_dir, filename)
+    gc = Magick::Draw.new
+    origin_x = width / 2
+    origin_y = height / 2
+    perim_x = width / 2
+    perim_y = 1
+    gc.fill_color(color)
+    gc.circle(origin_x, origin_y, perim_x, perim_y)
+    gc.draw(image)
+    image
   end
 
 end
