@@ -5,11 +5,14 @@ require "rmagick"
 
 class GameWindow < Gosu::Window
 
+  LED_OFF_COLOR = "#440000"
+  LED_ON_COLOR = "#aa3300"
+
   def initialize
     super 640, 480
     self.caption = "Gosu Tutorial Game"
-    @led_off_image = Gosu::Image.new(rmagick_circle("#440000"))
-    @led_on_image = Gosu::Image.new(rmagick_circle("#aa3300"))
+    @led_off_image = Gosu::Image.new(rmagick_circle(LED_ON_COLOR))
+    @led_on_image = Gosu::Image.new(rmagick_circle(LED_OFF_COLOR))
     @count = 123
     Thread.new do
       loop do
@@ -38,8 +41,10 @@ class GameWindow < Gosu::Window
     end
   end
 
+  BACKGROUND_COLOR = 0xff_666666
+
   def draw_background
-    color = Gosu::Color.argb(0xff_666666)
+    color = Gosu::Color.argb(BACKGROUND_COLOR)
     Gosu.draw_rect(0, 0, width, height, color)
   end
 
