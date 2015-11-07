@@ -15,7 +15,12 @@ class HorizontalLayout
 
   def_delegators :@elements,
      :"<<",
+     :"[]",
      :each
+
+  def update
+    @elements.each(&:update)
+  end
 
   def draw(left, top)
     left_to_right_elements.each do |element|
@@ -105,11 +110,15 @@ end
 
 class Led
 
-  attr_accessor :on
+  attr_accessor :source
 
-  def initialize(led_images)
+  def initialize(led_images, source: -> { false })
     @led_images = led_images
-    @on = false
+    @source = source
+  end
+
+  def update
+    @on = @source.call
   end
 
   def draw(left, top)
@@ -138,7 +147,11 @@ class GameWindow < Gosu::Window
     led_images = LedImages.new
     @leds = RightToLeftLayout.new(
       (0...num_leds).map do |i|
-        Led.new(led_images)
+        source = -> do
+          bit = (@count >> i) & 1
+          bit != 0
+        end
+        Led.new(led_images, source: source)
       end
     )
     @count = 123
@@ -159,10 +172,7 @@ class GameWindow < Gosu::Window
 
   def draw
     draw_background
-    @leds.each_with_index do |led, i|
-      bit = (@count >> i) & 1
-      led.on = (bit != 0)
-    end
+    @leds.update
     @leds.draw(0, 0)
   end
 
