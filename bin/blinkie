@@ -23,7 +23,7 @@ class HorizontalLayout
   end
 
   def draw(left, top)
-    left_to_right_elements.each do |element|
+    @elements.each do |element|
       element.draw(left, top)
       left += element.width
     end
@@ -35,26 +35,6 @@ class HorizontalLayout
 
   def height
     @elements.max(&:height)
-  end
-
-end
-
-class LeftToRightLayout < HorizontalLayout
-
-  private
-
-  def left_to_right_elements
-    @elements
-  end
-
-end
-
-class RightToLeftLayout < HorizontalLayout
-
-  private
-
-  def left_to_right_elements
-    @elements.reverse
   end
 
 end
@@ -145,8 +125,8 @@ class GameWindow < Gosu::Window
     self.caption = "Gosu Tutorial Game"
     num_leds = 8
     led_images = LedImages.new
-    @leds = RightToLeftLayout.new(
-      (0...num_leds).map do |i|
+    @leds = HorizontalLayout.new(
+      (num_leds - 1).downto(0).map do |i|
         source = -> do
           bit = (@count >> i) & 1
           bit != 0
