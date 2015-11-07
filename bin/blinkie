@@ -1,7 +1,58 @@
 #!/usr/bin/env ruby
 
+require "forwardable"
 require "gosu"
 require "rmagick"
+
+class HorizontalLayout
+
+  extend Forwardable
+  include Enumerable
+
+  def initialize(elements = [])
+    @elements = elements
+  end
+
+  def_delegators :@elements,
+     :"<<",
+     :each
+
+  def draw(left, top)
+    left_to_right_elements.each do |element|
+      element.draw(left, top)
+      left += element.width
+    end
+  end
+
+  def width
+    @elements.map(&:width).inject(0, &:+)
+  end
+
+  def height
+    @elements.max(&:height)
+  end
+
+end
+
+class LeftToRightLayout < HorizontalLayout
+
+  private
+
+  def left_to_right_elements
+    @elements
+  end
+
+end
+
+class RightToLeftLayout < HorizontalLayout
+
+  private
+
+  def left_to_right_elements
+    @elements.reverse
+  end
+
+end
 
 class LedImages
 
@@ -56,21 +107,21 @@ class Led
 
   attr_accessor :on
 
-  def initialize(left:, top:, led_images:)
-    @top = top
-    @left = left
+  def initialize(led_images)
     @led_images = led_images
     @on = false
   end
 
-  def draw
-    @led_images.draw(@left, @top, @on)
+  def draw(left, top)
+    @led_images.draw(left, top, @on)
   end
 
-  private
+  def width
+    LedImages::WIDTH
+  end
 
-  def image(on)
-    @images[!!on]
+  def height
+    LedImages::HEIGHT
   end
 
 end
@@ -85,10 +136,11 @@ class GameWindow < Gosu::Window
     self.caption = "Gosu Tutorial Game"
     num_leds = 8
     led_images = LedImages.new
-    @leds = (0...num_leds).map do |i|
-      position = (num_leds - 1) - i
-      Led.new(left: LedImages::WIDTH * position, top: 0, led_images: led_images)
-    end
+    @leds = RightToLeftLayout.new(
+      (0...num_leds).map do |i|
+        Led.new(led_images)
+      end
+    )
     @count = 123
     Thread.new do
       loop do
@@ -107,11 +159,11 @@ class GameWindow < Gosu::Window
 
   def draw
     draw_background
-    (@leds.size - 1).downto(0).each do |i|
+    @leds.each_with_index do |led, i|
       bit = (@count >> i) & 1
-      @leds[i].on = (bit != 0)
+      led.on = (bit != 0)
     end
-    @leds.each(&:draw)
+    @leds.draw(0, 0)
   end
 
   BACKGROUND_COLOR = 0xff_666666
