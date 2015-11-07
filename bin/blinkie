@@ -3,6 +3,55 @@
 require "gosu"
 require "rmagick"
 
+class Led
+
+  WIDTH = HEIGHT = 32
+  LED_OFF_COLOR = "#440000"
+  LED_ON_COLOR = "#aa3300"
+
+  attr_accessor :on
+
+  def initialize(left:, top:)
+    @top = top
+    @left = left
+    @on = false
+    @led_on_image = circle(LED_ON_COLOR)
+    @led_off_image = circle(LED_OFF_COLOR)
+  end
+
+  def draw
+    scale = 1
+    image = @on ? @led_on_image : @led_off_image
+    image.draw(@left, @top, 0, scale, scale)
+  end
+
+  private
+
+  def image(on)
+    @images[!!on]
+  end
+
+  def circle(color)
+    Gosu::Image.new(rmagick_circle(color))
+  end
+
+  def rmagick_circle(color)
+    image = Magick::Image.new(WIDTH, HEIGHT) do
+      self.background_color = "none"
+    end
+    gc = Magick::Draw.new
+    origin_x = WIDTH / 2
+    origin_y = HEIGHT / 2
+    perim_x = WIDTH / 2
+    perim_y = 1
+    gc.fill_color(color)
+    gc.circle(origin_x, origin_y, perim_x, perim_y)
+    gc.draw(image)
+    image
+  end
+
+end
+
 class GameWindow < Gosu::Window
 
   LED_OFF_COLOR = "#440000"
@@ -11,8 +60,11 @@ class GameWindow < Gosu::Window
   def initialize
     super 640, 480
     self.caption = "Gosu Tutorial Game"
-    @led_off_image = Gosu::Image.new(rmagick_circle(LED_ON_COLOR))
-    @led_on_image = Gosu::Image.new(rmagick_circle(LED_OFF_COLOR))
+    num_leds = 8
+    @leds = (0...num_leds).map do |i|
+      position = (num_leds - 1) - i
+      Led.new(left: Led::WIDTH * position, top: 0)
+    end
     @count = 123
     Thread.new do
       loop do
@@ -31,14 +83,11 @@ class GameWindow < Gosu::Window
 
   def draw
     draw_background
-    scale = 1.0
-    x = 0
-    15.downto(0).each do |i|
+    (@leds.size - 1).downto(0).each do |i|
       bit = (@count >> i) & 1
-      image = (bit == 1) ? @led_on_image : @led_off_image
-      image.draw(x, 0, 0, scale, scale)
-      x += image.width
+      @leds[i].on = (bit != 0)
     end
+    @leds.each(&:draw)
   end
 
   BACKGROUND_COLOR = 0xff_666666
@@ -56,23 +105,6 @@ class GameWindow < Gosu::Window
       width, height, color,
       0,
     )
-  end
-
-  def rmagick_circle(color)
-    width = 32
-    height = width
-    image = Magick::Image.new(width, height) do
-      self.background_color = "none"
-    end
-    gc = Magick::Draw.new
-    origin_x = width / 2
-    origin_y = height / 2
-    perim_x = width / 2
-    perim_y = 1
-    gc.fill_color(color)
-    gc.circle(origin_x, origin_y, perim_x, perim_y)
-    gc.draw(image)
-    image
   end
 
 end
