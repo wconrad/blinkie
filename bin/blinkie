@@ -3,32 +3,32 @@
 require "gosu"
 require "rmagick"
 
-class Led
+class LedImages
 
   WIDTH = HEIGHT = 32
   LED_OFF_COLOR = "#440000"
   LED_ON_COLOR = "#aa3300"
 
-  attr_accessor :on
-
-  def initialize(left:, top:)
-    @top = top
-    @left = left
-    @on = false
-    @led_on_image = circle(LED_ON_COLOR)
-    @led_off_image = circle(LED_OFF_COLOR)
+  def initialize
+    @on = circle(LED_ON_COLOR)
+    @off = circle(LED_OFF_COLOR)
   end
 
-  def draw
+  def draw(left, top, on)
+    image = image(on)
+    z = 0
     scale = 1
-    image = @on ? @led_on_image : @led_off_image
-    image.draw(@left, @top, 0, scale, scale)
+    image.draw(left, top, z, scale, scale)
   end
 
   private
 
   def image(on)
-    @images[!!on]
+    if on
+      @on
+    else
+      @off
+    end
   end
 
   def circle(color)
@@ -49,6 +49,29 @@ class Led
     gc.draw(image)
     image
   end
+  
+end
+
+class Led
+
+  attr_accessor :on
+
+  def initialize(left:, top:, led_images:)
+    @top = top
+    @left = left
+    @led_images = led_images
+    @on = false
+  end
+
+  def draw
+    @led_images.draw(@left, @top, @on)
+  end
+
+  private
+
+  def image(on)
+    @images[!!on]
+  end
 
 end
 
@@ -61,9 +84,10 @@ class GameWindow < Gosu::Window
     super 640, 480
     self.caption = "Gosu Tutorial Game"
     num_leds = 8
+    led_images = LedImages.new
     @leds = (0...num_leds).map do |i|
       position = (num_leds - 1) - i
-      Led.new(left: Led::WIDTH * position, top: 0)
+      Led.new(left: LedImages::WIDTH * position, top: 0, led_images: led_images)
     end
     @count = 123
     Thread.new do
