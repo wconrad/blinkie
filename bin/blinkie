@@ -106,7 +106,13 @@ class GameWindow < Gosu::Window
       0,
     )
   end
-
+  
+  def button_down(id)
+    if id == Gosu::KbQ
+      close
+    end
+  end
+  
 end
 
 window = GameWindow.new
