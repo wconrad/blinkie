@@ -34,7 +34,7 @@ module Blinkie
 
     LED_OFF_COLOR = "#440000"
     LED_ON_COLOR = "#aa3300"
-    DIAMETER = 32
+    DIAMETER = 16
     RADIUS = DIAMETER / 2
 
     def circle(color)

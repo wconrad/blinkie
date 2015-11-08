@@ -1,6 +1,6 @@
 require "gosu"
 
-require_relative "drawing/layout/horizontal"
+require_relative "drawing"
 require_relative "led"
 require_relative "led_images"
 
@@ -22,7 +22,10 @@ module Blinkie
             bit = (@count >> i) & 1
             bit != 0
           end
-          Led.new(led_images, source: source)
+          Drawing::Layout::Padding.new(
+            Led.new(led_images, source: source),
+            padding: 10
+          )
         end
       )
       @count = 123

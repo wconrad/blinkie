@@ -13,6 +13,7 @@ module Blinkie
           @elements = elements
         end
 
+        #todo are these needed?
         def_delegators :@elements,
            :"<<",
            :"[]",
