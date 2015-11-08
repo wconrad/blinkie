@@ -1,5 +1,3 @@
-require "forwardable"
-
 module Blinkie
   module Drawing
     module Layout
@@ -7,17 +5,10 @@ module Blinkie
       class Horizontal
 
         extend Forwardable
-        include Enumerable
 
         def initialize(elements = [])
           @elements = elements
         end
-
-        #todo are these needed?
-        def_delegators :@elements,
-           :"<<",
-           :"[]",
-           :each
 
         def update
           @elements.each(&:update)
