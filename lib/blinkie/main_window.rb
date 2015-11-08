@@ -1,6 +1,6 @@
 require "gosu"
 
-require_relative "horizontal_layout"
+require_relative "drawing/layout/horizontal"
 require_relative "led"
 require_relative "led_images"
 
@@ -16,7 +16,7 @@ module Blinkie
       self.caption = "Gosu Tutorial Game"
       num_leds = 8
       led_images = LedImages.new
-      @leds = HorizontalLayout.new(
+      @leds = Drawing::Layout::Horizontal.new(
         (num_leds - 1).downto(0).map do |i|
           source = -> do
             bit = (@count >> i) & 1

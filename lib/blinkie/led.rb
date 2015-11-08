@@ -1,7 +1,7 @@
 require "forwardable"
 
+require_relative "drawing/layout/selectable"
 require_relative "led_images"
-require_relative "selectable_layout"
 
 module Blinkie
 
@@ -12,7 +12,7 @@ module Blinkie
     attr_accessor :source
 
     def initialize(led_images, source: -> { false })
-      @layout = SelectableLayout.new(led_images)
+      @layout = Drawing::Layout::Selectable.new(led_images)
       @source = source
     end
 
