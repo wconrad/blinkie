@@ -1,33 +1,20 @@
 require "gosu"
 
-require_relative "drawing"
-require_relative "led"
 require_relative "led_images"
+require_relative "register"
 
 module Blinkie
 
   class MainWindow < Gosu::Window
-
-    LED_OFF_COLOR = "#440000"
-    LED_ON_COLOR = "#aa3300"
 
     def initialize
       super 640, 480
       self.caption = "Gosu Tutorial Game"
       num_leds = 8
       led_images = LedImages.new
-      @leds = Drawing::Layout::Horizontal.new(
-        (num_leds - 1).downto(0).map do |i|
-          source = -> do
-            bit = (@count >> i) & 1
-            bit != 0
-          end
-          Drawing::Layout::Padding.new(
-            Led.new(led_images, source: source),
-            padding: 10
-          )
-        end
-      )
+      @top_element = Register.new(led_images: led_images, bits: 8) do
+        @count
+      end
       @count = 123
       Thread.new do
         loop do
@@ -42,12 +29,12 @@ module Blinkie
     end
 
     def update
+      @top_element.update
     end
 
     def draw
       draw_background
-      @leds.update
-      @leds.draw(0, 0)
+      @top_element.draw(0, 0)
     end
 
     BACKGROUND_COLOR = 0xff_666666
