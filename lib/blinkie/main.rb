@@ -1,3 +1,8 @@
+begin
+  require "cute_print"
+rescue LoadError
+end
+
 require_relative "main_window"
 
 module Blinkie

@@ -1,13 +1,25 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    cute_print (1.1.0)
+      hirb (~> 0.7)
+      ruby2ruby (~> 2.1)
+      ruby_parser (~> 3.6)
     gosu (0.10.4)
+    hirb (0.7.3)
     rmagick (2.15.0)
+    ruby2ruby (2.2.0)
+      ruby_parser (~> 3.1)
+      sexp_processor (~> 4.0)
+    ruby_parser (3.7.1)
+      sexp_processor (~> 4.1)
+    sexp_processor (4.6.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  cute_print
   gosu
   rmagick
 
