@@ -12,7 +12,7 @@ module Blinkie
   class MainWindow < Gosu::Window
 
     def initialize
-      super 300, 100
+      super 300, 150
       self.caption = "Blinkie"
       Thread.abort_on_exception = true
       @count = 0
@@ -86,19 +86,35 @@ module Blinkie
     NUM_LEDS = 8
 
     def init_layout
-      @top_element << Drawing::Layout::Horizontal.new(
-        @led_register.map do |led|
-          Drawing::Layout::Padding.new(led, padding: 4)
-        end
-      )
-      switch_row = Drawing::Layout::Horizontal.new
-      @switch_register.each do |switch|
-        switch_row << Drawing::Layout::Padding.new(switch, padding: 4)
+      grid = Drawing::Layout::Grid.new
+      row = @led_register.map do |led|
+        Drawing::Layout::Padding.new(led, padding: 4)
       end
-      switch_row << Drawing::Layout::Padding.new(@reset_switch, padding: 4)
-      switch_row << Drawing::Layout::Padding.new(@run_switch, padding: 4)
-      @top_element << switch_row
-    end
+      grid << row
+      row = @switch_register.map do |switch|
+        Drawing::Layout::Padding.new(switch, padding: 4)
+      end
+      row << Drawing::Layout::Padding.new(@reset_switch, padding: 4)
+      row << Drawing::Layout::Padding.new(@run_switch, padding: 4)
+      grid << row
+      # begin
+      #   grid = Drawing::Layout::Grid.new
+      #   grid << [
+      #     Drawing::Image.new(Gosu::Image.from_text("FOOOOO", _line_height = 12)),
+      #     Drawing::Image.new(Gosu::Image.from_text("BAR", _line_height = 12)),
+      #   ]
+      #   grid << [
+      #     Drawing::Image.new(Gosu::Image.from_text("BAZ", _line_height = 12)),
+      #     Drawing::Image.new(Gosu::Image.from_text("QUX\nQUX", _line_height = 12)),
+      #   ]
+      #   grid << [
+      #     Drawing::Image.new(Gosu::Image.from_text("A", _line_height = 12)),
+      #     Drawing::Image.new(Gosu::Image.from_text("B", _line_height = 12)),
+      #   ]
+      #   @top_element << grid
+      # end #DEBUG
+      @top_element = grid
+   end
 
     def try_mouse_event(event)
       @top_element.try_mouse_event(mouse_x, mouse_y, event)

@@ -1,7 +1,6 @@
 require "forwardable"
 
-require_relative "drawing/is_visual_element"
-require_relative "drawing/layout/selectable"
+require_relative "drawing"
 require_relative "led_images"
 
 module Blinkie

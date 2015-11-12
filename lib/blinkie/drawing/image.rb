@@ -6,7 +6,7 @@ module Blinkie
   module Drawing
     
     # An image, from a file, or created by rmagick.
-    class RmagickImage
+    class Image
 
       include IsVisualElement
 

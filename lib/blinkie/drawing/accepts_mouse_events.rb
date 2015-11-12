@@ -1,5 +1,3 @@
-require_relative "../drawing/accepts_mouse_events"
-
 module Blinkie
   module Drawing
     module AcceptsMouseEvents
@@ -15,7 +13,8 @@ module Blinkie
       end
 
       def in_bounds?(x, y)
-        x < width && y < height
+        (0...width).cover?(x) &&
+          (0...height).cover?(y)
       end
       
     end

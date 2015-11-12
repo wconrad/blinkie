@@ -1,4 +1,5 @@
 require "forwardable"
+
 require_relative "drawing"
 require_relative "switch_images"
 

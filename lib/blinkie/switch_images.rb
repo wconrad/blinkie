@@ -1,6 +1,6 @@
 require "rmagick"
 
-require_relative "drawing/rmagic_image"
+require_relative "drawing"
 
 module Blinkie
 
@@ -49,7 +49,7 @@ module Blinkie
       gc.rectangle(0, 0, WIDTH - 1, HEIGHT - 1)
       gc.draw(image)
       image.flip! if invert
-      Drawing::RmagickImage.new(image)
+      Drawing::Image.new(image)
     end
     
   end

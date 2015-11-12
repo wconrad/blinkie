@@ -1,6 +1,6 @@
 require "rmagick"
 
-require_relative "drawing/rmagic_image"
+require_relative "drawing"
 
 module Blinkie
 
@@ -25,7 +25,7 @@ module Blinkie
     RADIUS = DIAMETER / 2
 
     def circle(color)
-      Drawing::RmagickImage.new(rmagick_circle(color))
+      Drawing::Image.new(rmagick_circle(color))
     end
 
     def rmagick_circle(color)
