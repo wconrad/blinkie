@@ -2,8 +2,9 @@ require "gosu"
 
 require_relative "led_images"
 require_relative "led_register"
-require_relative "toggle_switch"
+require_relative "momentary_switch"
 require_relative "switch_images"
+require_relative "toggle_switch"
 require_relative "toggle_switch_register"
 
 module Blinkie
@@ -31,7 +32,7 @@ module Blinkie
         switch_row << Drawing::Layout::Padding.new(switch, padding: 4)
       end
       switch_row << Drawing::Layout::Padding.new(
-        ToggleSwitch.new(switch_images) do |on|
+        MomentarySwitch.new(switch_images) do |on|
           @count = switch_register.value if on
         end,
         padding: 4
@@ -81,8 +82,19 @@ module Blinkie
       when Gosu::KbQ
         close
       when Gosu::MsLeft
-        @top_element.try_mouse_event(mouse_x, mouse_y, :left_click)
+        try_mouse_event(:left_down)
       end
+    end
+
+    def button_up(id)
+      case id
+      when Gosu::MsLeft
+        try_mouse_event(:left_up)
+      end
+    end
+
+    def try_mouse_event(event)
+      @top_element.try_mouse_event(mouse_x, mouse_y, event)
     end
     
   end

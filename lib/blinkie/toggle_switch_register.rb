@@ -26,9 +26,11 @@ module Blinkie
 
     def set_bit(bit_number, on)
       bit = 1 << bit_number
-      @value &= ~bit
-      @value |= bit if on
-      ql {@value} #DEBUG
+      if on
+        @value |= bit
+      else
+        @value &= ~bit
+      end
     end
 
   end
