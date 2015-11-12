@@ -12,8 +12,10 @@ module Blinkie
   class MainWindow < Gosu::Window
 
     def initialize
-      super 640, 480
-      self.caption = "Gosu Tutorial Game"
+      super 300, 100
+      self.caption = "Blinkie"
+      @count = 0
+      @enabled = false
       num_leds = 8
       led_images = LedImages.new
       switch_images = SwitchImages.new
@@ -38,14 +40,12 @@ module Blinkie
         padding: 4
       )
       switch_row << Drawing::Layout::Padding.new(
-        ToggleSwitch.new(switch_images) do |on|
+        ToggleSwitch.new(switch_images, on: true) do |on|
           @enabled = on
         end,
         padding: 4
       )
       @top_element << switch_row
-      @count = 0
-      @enabled = false
       Thread.new do
         loop do
           @count += 1 if @enabled
