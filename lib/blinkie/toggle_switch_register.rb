@@ -1,10 +1,10 @@
 require "forwardable"
 
-require_relative "switch"
+require_relative "toggle_switch"
 
 module Blinkie
 
-  class SwitchRegister
+  class ToggleSwitchRegister
 
     extend Forwardable
     include Enumerable
@@ -14,7 +14,7 @@ module Blinkie
     def initialize(images:, bits:)
       @value = 0
       @switches = (bits - 1).downto(0).map do |bit_number|
-        Switch.new(images) do |on|
+        ToggleSwitch.new(images) do |on|
           set_bit(bit_number, on)
         end
       end

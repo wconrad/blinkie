@@ -2,9 +2,9 @@ require "gosu"
 
 require_relative "led_images"
 require_relative "led_register"
-require_relative "switch"
+require_relative "toggle_switch"
 require_relative "switch_images"
-require_relative "switch_register"
+require_relative "toggle_switch_register"
 
 module Blinkie
 
@@ -16,7 +16,7 @@ module Blinkie
       num_leds = 8
       led_images = LedImages.new
       switch_images = SwitchImages.new
-      switch_register = SwitchRegister.new(images: switch_images, bits: 8)
+      switch_register = ToggleSwitchRegister.new(images: switch_images, bits: 8)
       @top_element = Drawing::Layout::Vertical.new
       led_register = LedRegister.new(images: led_images, bits: 8) do
         @count
@@ -31,7 +31,7 @@ module Blinkie
         switch_row << Drawing::Layout::Padding.new(switch, padding: 4)
       end
       switch_row << Drawing::Layout::Padding.new(
-        Switch.new(switch_images) do |on|
+        ToggleSwitch.new(switch_images) do |on|
           @count = switch_register.value if on
         end,
         padding: 4

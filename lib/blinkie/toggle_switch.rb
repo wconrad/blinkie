@@ -4,7 +4,7 @@ require_relative "switch_images"
 
 module Blinkie
 
-  class Switch
+  class ToggleSwitch
 
     extend Forwardable
     include Drawing::IsVisualElement
