@@ -85,11 +85,19 @@ module Blinkie
     BACKGROUND_COLOR = 0xff_666666
     NUM_LEDS = 8
 
+    #todo fine-tune text labels
+    #todo better class for text
     def init_layout
       grid = Drawing::Layout::Grid.new
       row = @led_register.map do |led|
         Drawing::Layout::Padding.new(led, padding: 4)
       end
+      grid << row
+      row = NUM_LEDS.times.map do
+        Drawing::Nothing.new
+      end
+      row << Drawing::Image.new(Gosu::Image.from_text("SET", _line_height = 12))
+      row << Drawing::Image.new(Gosu::Image.from_text("RUN", _line_height = 12))
       grid << row
       row = @switch_register.map do |switch|
         Drawing::Layout::Padding.new(switch, padding: 4)
@@ -97,22 +105,10 @@ module Blinkie
       row << Drawing::Layout::Padding.new(@reset_switch, padding: 4)
       row << Drawing::Layout::Padding.new(@run_switch, padding: 4)
       grid << row
-      # begin
-      #   grid = Drawing::Layout::Grid.new
-      #   grid << [
-      #     Drawing::Image.new(Gosu::Image.from_text("FOOOOO", _line_height = 12)),
-      #     Drawing::Image.new(Gosu::Image.from_text("BAR", _line_height = 12)),
-      #   ]
-      #   grid << [
-      #     Drawing::Image.new(Gosu::Image.from_text("BAZ", _line_height = 12)),
-      #     Drawing::Image.new(Gosu::Image.from_text("QUX\nQUX", _line_height = 12)),
-      #   ]
-      #   grid << [
-      #     Drawing::Image.new(Gosu::Image.from_text("A", _line_height = 12)),
-      #     Drawing::Image.new(Gosu::Image.from_text("B", _line_height = 12)),
-      #   ]
-      #   @top_element << grid
-      # end #DEBUG
+      row = NUM_LEDS.times.map { Drawing::Nothing.new }
+      row << Drawing::Nothing.new
+      row << Drawing::Image.new(Gosu::Image.from_text("HALT", _line_height = 12))
+      grid << row
       @top_element = grid
    end
 

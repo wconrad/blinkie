@@ -6,6 +6,7 @@ module Blinkie
   module Drawing
     module Layout
 
+      #todo move this out of padding?
       class Padding
 
         extend Forwardable
@@ -14,10 +15,12 @@ module Blinkie
         def initialize(
               element,
               padding: 0,
-              left_padding: nil,
-              right_padding: nil,
-              top_padding: nil,
-              bottom_padding: nil
+              vpadding: padding,
+              hpadding: padding,
+              left_padding: hpadding,
+              right_padding: hpadding,
+              top_padding: vpadding,
+              bottom_padding: vpadding
             )
           @element = element
           @left_padding = left_padding || padding
