@@ -1,7 +1,7 @@
 require "gosu"
 
 require_relative "led_images"
-require_relative "register"
+require_relative "led_register"
 require_relative "switch"
 require_relative "switch_images"
 
@@ -16,7 +16,7 @@ module Blinkie
       led_images = LedImages.new
       switch_images = SwitchImages.new
       @top_element = Drawing::Layout::Vertical.new
-      @top_element << Register.new(led_images: led_images, bits: 8) do
+      @top_element << LedRegister.new(led_images: led_images, bits: 8) do
         @count
       end
       @top_element << Switch.new(switch_images) do |on|

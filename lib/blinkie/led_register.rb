@@ -5,7 +5,7 @@ require_relative "led"
 
 module Blinkie
 
-  class Register
+  class LedRegister
 
     extend Forwardable
     include Drawing::IsVisualElement
