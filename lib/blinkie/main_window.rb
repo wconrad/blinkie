@@ -16,9 +16,14 @@ module Blinkie
       led_images = LedImages.new
       switch_images = SwitchImages.new
       @top_element = Drawing::Layout::Vertical.new
-      @top_element << LedRegister.new(led_images: led_images, bits: 8) do
+      led_register = LedRegister.new(led_images: led_images, bits: 8) do
         @count
       end
+      @top_element << Drawing::Layout::Horizontal.new(
+        led_register.map do |led|
+          Drawing::Layout::Padding.new(led, padding: 4)
+        end
+      )
       @top_element << Switch.new(switch_images) do |on|
         ql {on}
       end
