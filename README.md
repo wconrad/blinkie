@@ -6,6 +6,8 @@ technology demonstrator showing a simulation of a small front panel
 with LEDs, toggle switches, and momentary switches.  It implements a
 binary counter with some controls.
 
+![Blinkie screen shot](/screenshots/blinkie.png?raw=true)
+
 # To install
 
 Clone this project, then:
