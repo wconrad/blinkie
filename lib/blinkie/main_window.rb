@@ -37,12 +37,19 @@ module Blinkie
         end,
         padding: 4
       )
+      switch_row << Drawing::Layout::Padding.new(
+        ToggleSwitch.new(switch_images) do |on|
+          @enabled = on
+        end,
+        padding: 4
+      )
       @top_element << switch_row
-      @count = 123
+      @count = 0
+      @enabled = false
       Thread.new do
         loop do
-          @count += 1
-          sleep(0.1)
+          @count += 1 if @enabled
+          sleep(0.5)
         end
       end
     end
