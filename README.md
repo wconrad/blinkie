@@ -2,8 +2,9 @@
 
 If this project hatches, it will become a simulation of an old-school
 computer with a blinking-light front panel.  Right now, it's just a
-technology demonstrator showing how simulation a small front panel
-with LEDs and switches.
+technology demonstrator showing a simulation of a small front panel
+with LEDs, toggle switches, and momentary switches.  It implements a
+binary counter with some controls.
 
 # To install
 
