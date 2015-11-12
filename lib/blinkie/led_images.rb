@@ -7,27 +7,14 @@ module Blinkie
   class LedImages
 
     def initialize
-      @selectable = {
+      @images = {
         false => circle(LED_OFF_COLOR),
         true => circle(LED_ON_COLOR),
       }
     end
 
     def to_hash
-      @selectable
-    end
-
-    def width
-      @selectable.width
-    end
-
-    def height
-      @selectable.height
-    end
-
-    def draw(left, top, on)
-      @selectable.select(!!on)
-      @selectable.draw(left, top)
+      @images
     end
 
     private

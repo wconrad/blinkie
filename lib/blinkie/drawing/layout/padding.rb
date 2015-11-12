@@ -1,5 +1,7 @@
 require "forwardable"
 
+require_relative "../is_visual_element"
+
 module Blinkie
   module Drawing
     module Layout
@@ -7,6 +9,7 @@ module Blinkie
       class Padding
 
         extend Forwardable
+        include IsVisualElement
 
         def initialize(
               element,
@@ -23,7 +26,9 @@ module Blinkie
           @bottom_padding = bottom_padding || padding
         end
 
-        def_delegator :@element, :update
+        def_delegators :@element,
+                       :mouse_event,
+                       :update
 
         def draw(left, top)
           @element.draw(left + @left_padding, top + @top_padding)

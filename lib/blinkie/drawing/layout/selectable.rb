@@ -1,5 +1,7 @@
 require "forwardable"
 
+require_relative "../is_visual_element"
+
 module Blinkie
   module Drawing
     module Layout
@@ -7,6 +9,7 @@ module Blinkie
       class Selectable
 
         extend Forwardable
+        include IsVisualElement
 
         def initialize(element_hash)
           @element_hash = Hash(element_hash)
@@ -18,6 +21,7 @@ module Blinkie
 
         def_delegators :selected_element,
                        :draw,
+                       :try_mouse_event,
                        :update,
                        :width,
                        :height

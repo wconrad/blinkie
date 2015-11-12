@@ -1,5 +1,6 @@
 require "forwardable"
 
+require_relative "drawing/is_visual_element"
 require_relative "drawing/layout/selectable"
 require_relative "led_images"
 
@@ -8,6 +9,7 @@ module Blinkie
   class Led
 
     extend Forwardable
+    include Drawing::IsVisualElement
 
     attr_accessor :source
 
@@ -19,6 +21,7 @@ module Blinkie
     def update
       on = !!@source.call
       @layout.select(on)
+      @layout.update
     end
 
     def_delegators :@layout,

@@ -8,6 +8,7 @@ module Blinkie
   class Register
 
     extend Forwardable
+    include Drawing::IsVisualElement
 
     def initialize(led_images:, bits:, &register_source)
       @leds = Drawing::Layout::Horizontal.new(
@@ -29,7 +30,8 @@ module Blinkie
        :update,
        :draw,
        :width,
-       :height
+       :height,
+       :try_mouse_event
 
   end
 

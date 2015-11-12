@@ -4,13 +4,17 @@ module Blinkie
   module Drawing
     module Layout
 
-      class Horizontal
+      class Vertical
 
         extend Forwardable
         include IsVisualElement
 
         def initialize(elements = [])
           @elements = elements
+        end
+
+        def <<(element)
+          @elements << element
         end
 
         def update
@@ -20,22 +24,22 @@ module Blinkie
         def draw(left, top)
           @elements.each do |element|
             element.draw(left, top)
-            left += element.width
+            top += element.height
           end
         end
 
         def width
-          @elements.map(&:width).inject(0, &:+)
+          @elements.map(&:width).max
         end
 
         def height
-          @elements.map(&:height).max
+          @elements.map(&:height).inject(0, &:+)
         end
 
         def mouse_event(x, y, event)
           @elements.each do |element|
             return true if element.try_mouse_event(x, y, event)
-            x -= element.height
+            y -= element.height
           end
           false
         end

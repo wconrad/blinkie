@@ -2,6 +2,8 @@ require "gosu"
 
 require_relative "led_images"
 require_relative "register"
+require_relative "switch"
+require_relative "switch_images"
 
 module Blinkie
 
@@ -12,8 +14,13 @@ module Blinkie
       self.caption = "Gosu Tutorial Game"
       num_leds = 8
       led_images = LedImages.new
-      @top_element = Register.new(led_images: led_images, bits: 8) do
+      switch_images = SwitchImages.new
+      @top_element = Drawing::Layout::Vertical.new
+      @top_element << Register.new(led_images: led_images, bits: 8) do
         @count
+      end
+      @top_element << Switch.new(switch_images) do |on|
+        ql {on}
       end
       @count = 123
       Thread.new do
@@ -55,8 +62,11 @@ module Blinkie
     end
     
     def button_down(id)
-      if id == Gosu::KbQ
+      case id
+      when Gosu::KbQ
         close
+      when Gosu::MsLeft
+        @top_element.try_mouse_event(mouse_x, mouse_y, :left_click)
       end
     end
     
