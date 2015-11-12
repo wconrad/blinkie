@@ -35,7 +35,7 @@ module Blinkie
         def mouse_event(x, y, event)
           @elements.each do |element|
             return true if element.try_mouse_event(x, y, event)
-            x -= element.height
+            x -= element.width
           end
           false
         end

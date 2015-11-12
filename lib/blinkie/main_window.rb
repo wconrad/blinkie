@@ -4,6 +4,7 @@ require_relative "led_images"
 require_relative "led_register"
 require_relative "switch"
 require_relative "switch_images"
+require_relative "switch_register"
 
 module Blinkie
 
@@ -15,8 +16,9 @@ module Blinkie
       num_leds = 8
       led_images = LedImages.new
       switch_images = SwitchImages.new
+      switch_register = SwitchRegister.new(images: switch_images, bits: 8)
       @top_element = Drawing::Layout::Vertical.new
-      led_register = LedRegister.new(led_images: led_images, bits: 8) do
+      led_register = LedRegister.new(images: led_images, bits: 8) do
         @count
       end
       @top_element << Drawing::Layout::Horizontal.new(
@@ -24,9 +26,11 @@ module Blinkie
           Drawing::Layout::Padding.new(led, padding: 4)
         end
       )
-      @top_element << Switch.new(switch_images) do |on|
-        ql {on}
-      end
+      @top_element << Drawing::Layout::Horizontal.new(
+        switch_register.map do |switch|
+          Drawing::Layout::Padding.new(switch, padding: 4)
+        end
+      )
       @count = 123
       Thread.new do
         loop do

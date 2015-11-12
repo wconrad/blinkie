@@ -9,14 +9,12 @@ module Blinkie
     extend Forwardable
     include Enumerable
 
-    def initialize(led_images:, bits:, &register_source)
+    def initialize(images:, bits:, &register_source)
       @leds = (bits - 1).downto(0).map do |i|
         bit_source = -> do
-          register_value = register_source.call
-          bit = (register_value >> i) & 1
-          bit != 0
+          register_source.call[i] != 0
         end
-        Led.new(led_images, source: bit_source)
+        Led.new(images, source: bit_source)
       end
     end
 

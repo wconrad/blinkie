@@ -26,7 +26,7 @@ module Blinkie
     OUTLINE_COLOR = "#000000"
     WIDTH = 16
     HEIGHT = 32
-    SHADOW_HEIGHT = 4
+    SHADOW_HEIGHT = 6
 
     def draw(invert)
       image = Magick::Image.new(WIDTH, HEIGHT) do
