@@ -26,11 +26,17 @@ module Blinkie
           Drawing::Layout::Padding.new(led, padding: 4)
         end
       )
-      @top_element << Drawing::Layout::Horizontal.new(
-        switch_register.map do |switch|
-          Drawing::Layout::Padding.new(switch, padding: 4)
-        end
+      switch_row = Drawing::Layout::Horizontal.new
+      switch_register.each do |switch|
+        switch_row << Drawing::Layout::Padding.new(switch, padding: 4)
+      end
+      switch_row << Drawing::Layout::Padding.new(
+        Switch.new(switch_images) do |on|
+          @count = switch_register.value if on
+        end,
+        padding: 4
       )
+      @top_element << switch_row
       @count = 123
       Thread.new do
         loop do

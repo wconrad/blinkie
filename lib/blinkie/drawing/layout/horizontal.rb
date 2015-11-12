@@ -13,6 +13,8 @@ module Blinkie
           @elements = elements
         end
 
+        def_delegator :@elements, :<<
+
         def update
           @elements.each(&:update)
         end
