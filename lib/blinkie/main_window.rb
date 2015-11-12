@@ -14,41 +14,20 @@ module Blinkie
     def initialize
       super 300, 100
       self.caption = "Blinkie"
+      Thread.abort_on_exception = true
       @count = 0
-      @enabled = false
-      num_leds = 8
-      led_images = LedImages.new
-      switch_images = SwitchImages.new
-      switch_register = ToggleSwitchRegister.new(images: switch_images, bits: 8)
       @top_element = Drawing::Layout::Vertical.new
-      led_register = LedRegister.new(images: led_images, bits: 8) do
+      @led_images = LedImages.new
+      @switch_images = SwitchImages.new
+      @switch_register = ToggleSwitchRegister.new(images: @switch_images, bits: NUM_LEDS)
+      @run_switch = ToggleSwitch.new(@switch_images, on: true)
+      @led_register = LedRegister.new(images: @led_images, bits: NUM_LEDS) do
         @count
       end
-      @top_element << Drawing::Layout::Horizontal.new(
-        led_register.map do |led|
-          Drawing::Layout::Padding.new(led, padding: 4)
-        end
-      )
-      switch_row = Drawing::Layout::Horizontal.new
-      switch_register.each do |switch|
-        switch_row << Drawing::Layout::Padding.new(switch, padding: 4)
-      end
-      switch_row << Drawing::Layout::Padding.new(
-        MomentarySwitch.new(switch_images) do |on|
-          @count = switch_register.value if on
-        end,
-        padding: 4
-      )
-      switch_row << Drawing::Layout::Padding.new(
-        ToggleSwitch.new(switch_images, on: true) do |on|
-          @enabled = on
-        end,
-        padding: 4
-      )
-      @top_element << switch_row
+      init_layout
       Thread.new do
         loop do
-          @count += 1 if @enabled
+          @count += 1 if @run_switch.on
           sleep(0.5)
         end
       end
@@ -66,8 +45,6 @@ module Blinkie
       draw_background
       @top_element.draw(0, 0)
     end
-
-    BACKGROUND_COLOR = 0xff_666666
 
     def draw_background
       color = Gosu::Color.argb(BACKGROUND_COLOR)
@@ -98,6 +75,31 @@ module Blinkie
       when Gosu::MsLeft
         try_mouse_event(:left_up)
       end
+    end
+
+    private
+
+    BACKGROUND_COLOR = 0xff_666666
+    NUM_LEDS = 8
+
+    def init_layout
+      @top_element << Drawing::Layout::Horizontal.new(
+        @led_register.map do |led|
+          Drawing::Layout::Padding.new(led, padding: 4)
+        end
+      )
+      switch_row = Drawing::Layout::Horizontal.new
+      @switch_register.each do |switch|
+        switch_row << Drawing::Layout::Padding.new(switch, padding: 4)
+      end
+      switch_row << Drawing::Layout::Padding.new(
+        MomentarySwitch.new(@switch_images) do |on|
+          @count = @switch_register.value if on
+        end,
+        padding: 4
+      )
+      switch_row << Drawing::Layout::Padding.new(@run_switch, padding: 4)
+      @top_element << switch_row
     end
 
     def try_mouse_event(event)

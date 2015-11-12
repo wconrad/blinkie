@@ -9,10 +9,12 @@ module Blinkie
     extend Forwardable
     include Drawing::IsVisualElement
 
+    attr_reader :on
+
     def initialize(switch_images, on: false, &on_change)
       @layout = Drawing::Layout::Selectable.new(switch_images)
       @on = on
-      @on_change = on_change
+      @on_change = on_change || DO_NOTHING
       changed
     end
 
@@ -29,6 +31,8 @@ module Blinkie
     end
 
     private
+
+    DO_NOTHING = ->(*) {}
 
     def changed
       @layout.select(@on)
