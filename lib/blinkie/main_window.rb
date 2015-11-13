@@ -86,7 +86,6 @@ module Blinkie
     NUM_LEDS = 8
 
     #todo fine-tune text labels
-    #todo better class for text
     def init_layout
       grid = Drawing::Layout::Grid.new
       row = @led_register.map do |led|
@@ -96,8 +95,8 @@ module Blinkie
       row = NUM_LEDS.times.map do
         Drawing::Spacer.new
       end
-      row << Drawing::Image.new(Gosu::Image.from_text("SET", _line_height = 12))
-      row << Drawing::Image.new(Gosu::Image.from_text("RUN", _line_height = 12))
+      row << Drawing::Text.new("SET", line_height: 12)
+      row << Drawing::Text.new("RUN", line_height: 12)
       grid << row
       row = @switch_register.map do |switch|
         Drawing::Padding.new(switch, padding: 4)
@@ -107,7 +106,7 @@ module Blinkie
       grid << row
       row = NUM_LEDS.times.map { Drawing::Spacer.new }
       row << Drawing::Spacer.new
-      row << Drawing::Image.new(Gosu::Image.from_text("HALT", _line_height = 12))
+      row << Drawing::Text.new("HALT", line_height: 12)
       grid << row
       @top_element = grid
    end
