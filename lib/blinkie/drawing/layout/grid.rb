@@ -71,7 +71,7 @@ module Blinkie
 
         def column_width(col_num)
           @rows.map do |row|
-            (row[col_num] || Nothing.new).width
+            (row[col_num] || Spacer.new).width
           end.max
         end
 

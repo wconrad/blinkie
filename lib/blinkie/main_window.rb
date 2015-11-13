@@ -94,7 +94,7 @@ module Blinkie
       end
       grid << row
       row = NUM_LEDS.times.map do
-        Drawing::Nothing.new
+        Drawing::Spacer.new
       end
       row << Drawing::Image.new(Gosu::Image.from_text("SET", _line_height = 12))
       row << Drawing::Image.new(Gosu::Image.from_text("RUN", _line_height = 12))
@@ -105,8 +105,8 @@ module Blinkie
       row << Drawing::Padding.new(@reset_switch, padding: 4)
       row << Drawing::Padding.new(@run_switch, padding: 4)
       grid << row
-      row = NUM_LEDS.times.map { Drawing::Nothing.new }
-      row << Drawing::Nothing.new
+      row = NUM_LEDS.times.map { Drawing::Spacer.new }
+      row << Drawing::Spacer.new
       row << Drawing::Image.new(Gosu::Image.from_text("HALT", _line_height = 12))
       grid << row
       @top_element = grid
