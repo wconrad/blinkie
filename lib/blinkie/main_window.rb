@@ -90,7 +90,7 @@ module Blinkie
     def init_layout
       grid = Drawing::Layout::Grid.new
       row = @led_register.map do |led|
-        Drawing::Layout::Padding.new(led, padding: 4)
+        Drawing::Padding.new(led, padding: 4)
       end
       grid << row
       row = NUM_LEDS.times.map do
@@ -100,10 +100,10 @@ module Blinkie
       row << Drawing::Image.new(Gosu::Image.from_text("RUN", _line_height = 12))
       grid << row
       row = @switch_register.map do |switch|
-        Drawing::Layout::Padding.new(switch, padding: 4)
+        Drawing::Padding.new(switch, padding: 4)
       end
-      row << Drawing::Layout::Padding.new(@reset_switch, padding: 4)
-      row << Drawing::Layout::Padding.new(@run_switch, padding: 4)
+      row << Drawing::Padding.new(@reset_switch, padding: 4)
+      row << Drawing::Padding.new(@run_switch, padding: 4)
       grid << row
       row = NUM_LEDS.times.map { Drawing::Nothing.new }
       row << Drawing::Nothing.new
