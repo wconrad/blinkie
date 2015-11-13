@@ -10,7 +10,7 @@ technology demonstrator showing a binary counter with some controls.
 
 Clone this project, then:
 
-    gem install
+    bundle install
 
 # To run
 
